@@ -2,7 +2,7 @@ import WelcomeCard from "./components/WelcomeCard";
 
 function App() {
   return (
-    <div className="flex w-full justify-center">
+    <div className="flex flex-wrap w-full h-full justify-center content-center">
       <WelcomeCard />
     </div>
   )
