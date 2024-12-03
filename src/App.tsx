@@ -1,5 +1,5 @@
 // import Message from './Message';
-import WelcomeCard from "./WelcomeCard";
+import WelcomeCard from "./components/WelcomeCard";
 
 function App() {
   return (
