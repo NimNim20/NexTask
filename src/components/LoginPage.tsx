@@ -48,7 +48,7 @@ function LoginPage() {
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-slate-600">
-            Don't have an account? <a href="/signup" className="text-lime-500">Sign up</a>
+            Don't have an account? <a href="/register" className="text-lime-500">Sign up</a>
           </p>
         </div>
       </div>

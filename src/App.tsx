@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WelcomeCard from "./components/WelcomeCard";
+import RegisterPage from "./components/RegisterPage";
 import LoginPage from "./components/LoginPage";
 import Navbar from "./components/NavigationBar"; // Import the Navbar component
 
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<WelcomeCard />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </div>
     </Router>
