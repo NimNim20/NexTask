@@ -1,10 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WelcomeCard from "./components/WelcomeCard";
-import RegisterPage from "./components/RegisterPage";
-import LoginPage from "./components/LoginPage";
-import Navbar from "./components/NavigationBar"; // Import the Navbar component
+import LoginPage from "./components/pages/LoginPage";
+import RegisterPage from "./components/pages/RegisterPage";
+import TeamsPage from "./components/pages/TeamsPage";
+import Navbar from "./components/NavigationBar"; 
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
+  const isAuthenticated = false;
+
   return (
     <Router>
       <Navbar />
@@ -13,6 +17,9 @@ function App() {
           <Route path="/" element={<WelcomeCard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
+            <Route path="/teams" element={<TeamsPage />} />
+          </Route>
         </Routes>
       </div>
     </Router>

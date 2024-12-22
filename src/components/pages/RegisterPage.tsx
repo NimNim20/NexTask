@@ -1,30 +1,36 @@
 import { useState } from "react";
+import { registerUser } from "../mockApi"; // Import the mock API function
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Simple validation checks
+    // Simple validation check to ensure passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    // Proceed with registration logic (e.g., send data to a backend API)
-    console.log("Registering with", { email, password });
+    // Simulate registration using the mock API
+    const result = registerUser(email, password);
 
-    // This clears the form fields after registration
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setError(null);
-
-    // When we have backend API integration, we can redirect the user to the login page
+    // Handle the result of registration
+    if (result === "Registration successful!") {
+      setSuccessMessage(result);
+      setError(null);
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    } else {
+      setError(result);
+      setSuccessMessage(null);
+    }
   };
 
   return (
@@ -32,8 +38,11 @@ function RegisterPage() {
       <div className="bg-white shadow-sm border border-slate-200 rounded-lg p-6 w-full sm:w-96">
         <h2 className="text-3xl text-center text-slate-800 mb-6">Register to NexTask</h2>
 
+        {/* Display success or error message */}
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
+        {/* Registration Form */}
         <form onSubmit={handleRegister}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-semibold text-slate-700">
