@@ -1,86 +1,92 @@
-import { useState } from "react";
-import { loginUser } from "../mockApi"; // Import the mock API function
-import { Navigate } from "react-router-dom"; // Import Navigate for redirection
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../mockApi";
 
-function LoginPage() {
+interface LoginPageProps {
+  onLogin: (authenticated: boolean) => void; // Update global state
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [loggedIn, setLoggedIn] = useState(false); // Track login state
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Simulate login using the mock API
+  const handleLogin = () => {
     const result = loginUser(email, password);
-
     if (result === "Login successful!") {
-      setSuccessMessage(result);
-      setError(null);
-      setLoggedIn(true); // Mark the user as logged in
+      onLogin(true); // Update global state and persist login
+      navigate("/teams"); // Redirect to teams page
     } else {
-      setError(result);
-      setSuccessMessage(null);
+      setMessage(result); // Display error message
     }
   };
 
-  if (loggedIn) {
-    // If the user is logged in, redirect to the Projects page
-    return <Navigate to="/projects" />;
-  }
-
   return (
-    <section className="flex justify-center items-center h-full py-6">
-      <div className="bg-white shadow-sm border border-slate-200 rounded-lg p-6 w-full sm:w-96">
-        <h2 className="text-3xl text-center text-slate-800 mb-6">Login to NexTask</h2>
-
-        {/* Display success or error message */}
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
-
-        {/* Login Form */}
-        <form onSubmit={handleLogin}>
+    <div className="flex h-screen items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+        {message && (
+          <div
+            className={`mb-4 text-center ${
+              message === "Login successful!"
+                ? "text-green-500"
+                : "text-red-500"
+            }`}
+          >
+            {message}
+          </div>
+        )}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-semibold text-slate-700">
-              Email Address
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-medium mb-2"
+            >
+              Email
             </label>
             <input
-              id="email"
               type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-12 mt-2 px-3 border border-slate-300 rounded-md"
-              placeholder="you@example.com"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Enter your email"
               required
             />
           </div>
-
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-semibold text-slate-700">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-medium mb-2"
+            >
               Password
             </label>
             <input
-              id="password"
               type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full h-12 mt-2 px-3 border border-slate-300 rounded-md"
-              placeholder="Your password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Enter your password"
               required
             />
           </div>
-
           <button
             type="submit"
-            className="w-full h-12 bg-lime-500 rounded-lg text-white font-semibold"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Login
           </button>
         </form>
       </div>
-    </section>
+    </div>
   );
-}
+};
 
 export default LoginPage;
