@@ -1,0 +1,53 @@
+# .github/workflows/test-and-push.yml
+name: Test and Push with Custom Commit Message
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: "Commit message for the push"
+        required: true
+        default: "Automated changes from GitHub Actions"
+
+jobs:
+  test-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # 2. Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Start the local server
+      - name: Start local server
+        run: |
+          npm run start & # Start the server in the background
+          sleep 10         # Wait for the server to be ready
+
+      # 5. Run tests
+      - name: Run tests
+        run: npx playwright test --project=chromium
+
+      # 6. Push changes with a custom commit message
+      - name: Push changes to the repository
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add --all
+          git commit -m "${{ github.event.inputs.commit_message }}"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
