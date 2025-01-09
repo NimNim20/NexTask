@@ -1,51 +1,18 @@
-import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WelcomeCard from "./components/WelcomeCard";
-import LoginPage from "./components/pages/LoginPage";
-import RegisterPage from "./components/pages/RegisterPage";
-import TeamsPage from "./components/pages/TeamsPage";
 import Navbar from "./components/NavigationBar";
-import PrivateRoute from "./components/PrivateRoute";
+import Projects from "./pages/Projects"; // Import your Projects component
+import Teams from "./pages/Teams"; // Import your Teams component
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Check authentication state from localStorage on app load
-  useEffect(() => {
-    const authStatus = localStorage.getItem("isAuthenticated");
-    setIsAuthenticated(authStatus === "true");
-  }, []);
-
-  // Handle login
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    localStorage.setItem("isAuthenticated", "true"); // Persist state
-  };
-
-  // Handle logout
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated"); // Clear state
-  };
-
   return (
     <Router>
-      <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
-      <div className="flex flex-wrap w-full h-full justify-center content-center">
-        <Routes>
-          <Route path="/" element={<WelcomeCard />} />
-          <Route
-            path="/login"
-            element={<LoginPage onLogin={handleLogin} />}
-          />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route
-            element={<PrivateRoute isAuthenticated={isAuthenticated} />}
-          >
-            <Route path="/teams" element={<TeamsPage />} />
-          </Route>
-        </Routes>
-      </div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<WelcomeCard />} />
+        <Route path="/projects" element={<Projects />} /> {/* Add Projects route */}
+        <Route path="/teams" element={<Teams />} /> {/* Add Teams route */}
+      </Routes>
     </Router>
   );
 }
