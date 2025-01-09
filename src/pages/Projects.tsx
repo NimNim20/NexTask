@@ -24,8 +24,8 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-slate-800">
-      <div className="w-1/4 bg-white bg-opacity-80 p-4 overflow-y-auto">
+    <div className="flex h-screen bg-slate-950">
+      <div className="w-1/4 bg-white p-4 overflow-y-auto">
         <ProjectCreation onCreateProject={handleCreateProject} />
         <ProjectList 
           projects={projects} 
