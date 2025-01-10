@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
-import { Task, TaskStatus } from '../../utils/projectsTypes';
+import { Task, TaskStatus, User } from '../../utils/projectsTypes';
 import TaskCard from './TaskCard';
 
 interface TaskColumnProps {
@@ -21,6 +20,21 @@ const TaskColumn: React.FC<TaskColumnProps> = ({
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskDescription, setNewTaskDescription] = useState('');
 
+    const [predefinedUsers] = useState<User[]>([
+        { id: 1, name: 'Simon' },
+        { id: 2, name: 'Benjamin' },
+        { id: 3, name: 'Test' },
+    ]);
+
+    // Function to assign user to task
+    const handleAssignTask = (taskId: number, assigneeId: number) => {
+        tasks.map((task) =>
+            task.id === taskId
+                ? { ...task, assignee: predefinedUsers.find(user => user.id === assigneeId) }
+                : task
+        );
+    };
+
     const handleCreateTask = () => {
         if (newTaskTitle.trim()) {
             onCreateTask(status, newTaskTitle.trim(), newTaskDescription.trim());
@@ -31,19 +45,14 @@ const TaskColumn: React.FC<TaskColumnProps> = ({
 
     return (
         <div className={`w-64 ${color} p-4 rounded-lg`}>
-            <h3 className="font-bold mb-2">{status}</h3>
-            {tasks.map((task, index) => (
-                <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                    {(provided) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                        >
-                            <TaskCard task={task} onMoveTask={onMoveTask} />
-                        </div>
-                    )}
-                </Draggable>
+            <h3 className="font-semibold text-lg mb-2 text-black">{status}</h3>
+            {tasks.map((task) => (
+                <TaskCard
+                    key={task.id}
+                    task={task}
+                    onMoveTask={onMoveTask}
+                    onAssignTask={handleAssignTask}
+                />
             ))}
             <div className="mt-4">
                 <input
@@ -71,4 +80,3 @@ const TaskColumn: React.FC<TaskColumnProps> = ({
 };
 
 export default TaskColumn;
-

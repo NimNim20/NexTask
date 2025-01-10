@@ -22,7 +22,7 @@ const ProjectBoard: React.FC<ProjectBoardProps> = ({ project, onUpdateProject })
   const [tasksByStatus, setTasksByStatus] = useState(groupTasksByStatus(project.tasks));
 
   const statusColors: Record<TaskStatus, string> = {
-    [TaskStatus.Backlog]: 'bg-gray-200',
+    [TaskStatus.Backlog]: 'bg-white',
     [TaskStatus.NotStarted]: 'bg-blue-200',
     [TaskStatus.PickedForDevelopment]: 'bg-yellow-200',
     [TaskStatus.InProgress]: 'bg-purple-200',

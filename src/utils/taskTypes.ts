@@ -1,3 +1,4 @@
+// taskTypes.ts
 export enum TaskStatus {
     Backlog = 'Backlog',
     NotStarted = 'Not Started',
@@ -26,3 +27,9 @@ export interface Task {
     assignee: User | null;
     status: TaskStatus;
 }
+
+export const predefinedUsers: User[] = [
+    { id: 1, name: 'Simon' },
+    { id: 2, name: 'Benjamin' },
+    { id: 3, name: 'Test' },
+];
