@@ -1,4 +1,4 @@
-import GoToButton from "./GotoButton";
+import GoToButton from "./Buttons/GotoButton";
 
 function WelcomeCard() {
   return (

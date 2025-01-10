@@ -22,7 +22,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onSelectProject, se
             }`}
             onClick={() => onSelectProject(project)}
           >
-            <h3 className="font-semibold text-lg mb-1">{project.name}</h3>
+            <h3 className="font-semibold text-lg mb-1 text-black">{project.name}</h3>
             <p className="text-sm text-gray-600">{project.team?.name || 'No team assigned'}</p>
           </div>
         ))}

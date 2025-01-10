@@ -7,6 +7,7 @@ import ProjectBoard from '../components/Projects/ProjectBoard';
 const Projects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   const handleCreateProject = (newProject: Project) => {
     setProjects(prevProjects => [...prevProjects, newProject]);
@@ -14,6 +15,7 @@ const Projects: React.FC = () => {
 
   const handleSelectProject = (project: Project) => {
     setSelectedProject(project);
+    setIsSidebarVisible(false);
   };
 
   const handleUpdateProject = (updatedProject: Project) => {
@@ -23,22 +25,38 @@ const Projects: React.FC = () => {
     setSelectedProject(updatedProject);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarVisible(prev => !prev);
+  };
+
   return (
-    <div className="flex h-screen bg-slate-950">
-      <div className="w-1/4 bg-white p-4 overflow-y-auto">
-        <ProjectCreation onCreateProject={handleCreateProject} />
-        <ProjectList 
-          projects={projects} 
-          onSelectProject={handleSelectProject} 
-          selectedProject={selectedProject} 
-        />
-      </div>
-      <div className="w-3/4 p-4 overflow-y-auto">
-        {selectedProject ? (
-          <ProjectBoard 
-            project={selectedProject} 
-            onUpdateProject={handleUpdateProject} 
+    <div className="flex h-screen bg-slate-800">
+      {isSidebarVisible && (
+        <div className="w-1/6 bg-white p-4 overflow-y-auto transition-all duration-300 ease-in-out">
+          <ProjectCreation onCreateProject={handleCreateProject} />
+          <ProjectList 
+            projects={projects} 
+            onSelectProject={handleSelectProject} 
+            selectedProject={selectedProject} 
           />
+        </div>
+      )}
+      <div className={`${isSidebarVisible ? 'w-3/4' : 'w-full'} p-4 overflow-y-auto transition-all duration-300 ease-in-out`}>
+        {selectedProject ? (
+          <>
+            <div className="flex justify-between items-center mb-4">
+              <button
+                onClick={toggleSidebar}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {isSidebarVisible ? 'Hide Projects' : 'Show Projects'}
+              </button>
+            </div>
+            <ProjectBoard 
+              project={selectedProject} 
+              onUpdateProject={handleUpdateProject} 
+            />
+          </>
         ) : (
           <div className="flex items-center justify-center h-full">
             <p className="text-xl text-gray-500">Select a project to view its board</p>
