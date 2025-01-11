@@ -27,3 +27,5 @@ coverage
 *.tsbuildinfo
 backend/package-lock.json
 backend/package.json
+node_modules/.package-lock.json
+/node_modules
