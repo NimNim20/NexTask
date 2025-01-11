@@ -25,3 +25,5 @@ coverage
 *.env
 *.sw?
 *.tsbuildinfo
+backend/package-lock.json
+backend/package.json
