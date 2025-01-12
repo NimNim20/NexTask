@@ -1,5 +1,5 @@
 import React from 'react';
-import { Task, TaskStatus } from '../../utils/projectsTypes';
+import { Task, TaskStatus } from '../../types/projectsTypes';
 import TaskCard from './TaskCard';
 
 interface TaskColumnProps {

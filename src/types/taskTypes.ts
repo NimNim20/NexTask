@@ -1,4 +1,5 @@
-// taskTypes.ts
+import { User } from './userTypes';
+
 export enum TaskStatus {
     Backlog = 'Backlog',
     NotStarted = 'Not Started',
@@ -14,10 +15,6 @@ export enum TaskPriority {
     High = 'High',
 }
 
-export interface User {
-    id: string;
-    name: string;
-}
 
 export interface Task {
     id: string;

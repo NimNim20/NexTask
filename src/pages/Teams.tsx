@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
 import { auth } from '../components/config/firebase';
-import { Team } from '../utils/projectsTypes';
+import { Team } from '../types/projectsTypes';
 
 const Teams: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);

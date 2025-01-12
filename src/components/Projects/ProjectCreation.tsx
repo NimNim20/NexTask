@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Project, Team } from '../../utils/projectsTypes';
+import { Project, Team } from '../../types/projectsTypes';
 
 interface ProjectCreationProps {
   onCreateProject: (newProject: Project) => void;
