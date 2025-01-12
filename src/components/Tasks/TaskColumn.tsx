@@ -1,33 +1,46 @@
 import React from 'react';
-import { Task, TaskStatus } from '../../types/projectsTypes';
+import { Task, TaskStatus } from '../../types/taskTypes';
 import TaskCard from './TaskCard';
 
 interface TaskColumnProps {
-    status: TaskStatus;
+
+    title: TaskStatus;
+
     tasks: Task[];
-    onMoveTask: (taskId: string, newStatus: TaskStatus) => void;
-    onCreateTask: (status: TaskStatus, title: string, description: string) => void;
-    onDeleteTask: (taskId: string) => void;
-    color: string;
+
+    onMoveTask: (taskId: string, newStatus: TaskStatus) => Promise<void>;
+
+    onDeleteTask: (taskId: string) => Promise<void>;
+
+    onCreateTask: (title: string, description: string, status: string) => Promise<void>;
+    
+    onAssignTask: (taskId: string, userId: string) => Promise<void>;
+
+    users: { id: string; name: string }[];
+
 }
 
 const TaskColumn: React.FC<TaskColumnProps> = ({
-    status,
+    title,
     tasks,
-    onMoveTask
+    onMoveTask,
+    onAssignTask,
+    onDeleteTask,
+    users
 }) => {
     return (
-        <div className={`flex flex-col p-4 rounded-md bg-white w-full max-w-sm`}>
-            <h3 className="text-lg font-semibold text-black mb-2">{status}</h3>
-            <div className="space-y-2 flex-grow">
-                {tasks.map((task) => (
-                    <TaskCard
-                        key={task.id}
-                        task={task}
-                        onMoveTask={onMoveTask}
-                    />
-                ))}
-            </div>
+        <div className="w-1/3 p-4">
+            <h2 className="text-xl font-semibold mb-4">{title}</h2>
+            {tasks.map((task) => (
+                <TaskCard
+                    key={task.id}
+                    task={task}
+                    onMoveTask={onMoveTask}
+                    onAssignTask={onAssignTask}
+                    onDeleteTask={onDeleteTask}
+                    users={users}
+                />
+            ))}
         </div>
     );
 };

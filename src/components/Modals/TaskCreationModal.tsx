@@ -1,22 +1,20 @@
-// components/Modals/TaskCreationModal.tsx
-
 import React, { useState } from 'react';
 
 interface TaskCreationModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onCreateTask: (title: string, description: string, status: string) => void;
+    onCreateTask: (title: string, description: string, status: string, priority: string) => void;
 }
 
 const TaskCreationModal: React.FC<TaskCreationModalProps> = ({ isOpen, onClose, onCreateTask }) => {
     const [taskTitle, setTaskTitle] = useState('');
     const [taskDescription, setTaskDescription] = useState('');
-    const [taskStatus, setTaskStatus] = useState('NotStarted');
+    const [taskPriority, setTaskPriority] = useState('Low');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (taskTitle.trim()) {
-            onCreateTask(taskTitle, taskDescription, taskStatus);
+            onCreateTask(taskTitle, taskDescription, 'Backlog', taskPriority);
             onClose();
         }
     };
@@ -47,15 +45,15 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({ isOpen, onClose, 
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-sm font-semibold mb-2">Status</label>
+                            <label className="block text-sm font-semibold mb-2">Priority</label>
                             <select
-                                value={taskStatus}
-                                onChange={(e) => setTaskStatus(e.target.value)}
+                                value={taskPriority}
+                                onChange={(e) => setTaskPriority(e.target.value)}
                                 className="w-full px-4 py-2 border rounded-md"
                             >
-                                <option value="NotStarted">Not Started</option>
-                                <option value="InProgress">In Progress</option>
-                                <option value="Done">Done</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
                             </select>
                         </div>
                         <div className="flex justify-end gap-2">

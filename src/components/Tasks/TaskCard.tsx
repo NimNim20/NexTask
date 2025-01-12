@@ -1,9 +1,15 @@
+// TaskCard.tsx
 import React from 'react';
-import { Task, TaskStatus } from '../../types/projectsTypes';
+import { Task, TaskStatus } from '../../types/taskTypes';
+
+
 
 const TaskCard: React.FC<{
     task: Task;
     onMoveTask: (taskId: string, newStatus: TaskStatus) => void;
+    onAssignTask: (taskId: string, userId: string) => void;
+    onDeleteTask: (taskId: string) => void;
+    users: { id: string; name: string }[];
 }> = ({ task, onMoveTask }) => {
     const priorityColors = {
         Low: 'bg-green-500 text-white',
@@ -11,11 +17,13 @@ const TaskCard: React.FC<{
         High: 'bg-red-500 text-white',
     };
 
+    const assigneeName = typeof task.assignee === 'string' ? task.assignee : (task.assignee && (task.assignee as { name: string }).name) || 'No one';
+
     return (
         <div className="bg-white p-4 rounded-md shadow-md mb-4 flex flex-col h-full">
             <h4 className="text-lg font-semibold text-black mb-2">{task.title}</h4>
             <p className="text-black mb-2">{task.description}</p>
-            <p className="text-black mb-2">Assigned: {task.assignee?.name || 'No one'}</p>
+            <p className="text-black mb-2">Assigned: {assigneeName}</p>
 
             <div className={`p-2 rounded-md ${priorityColors[task.priority]}`}>
                 <span>{task.priority}</span>
@@ -24,7 +32,7 @@ const TaskCard: React.FC<{
             <select
                 value={task.status}
                 onChange={(e) => onMoveTask(task.id, e.target.value as TaskStatus)}
-                className="w-full p-2 bg-gray-100 rounded-md mt-2"
+                className="w-full p-2 bg-slate-700 rounded-md mt-2"
             >
                 {Object.values(TaskStatus).map((status) => (
                     <option key={status} value={status}>

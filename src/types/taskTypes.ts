@@ -1,4 +1,3 @@
-import { User } from './userTypes';
 
 export enum TaskStatus {
     Backlog = 'Backlog',
@@ -21,7 +20,8 @@ export interface Task {
     title: string;
     description: string;
     priority: TaskPriority;
-    assignee: User | null;
     status: TaskStatus;
+    assignee: string | null;
+    projectId: string;
 }
 

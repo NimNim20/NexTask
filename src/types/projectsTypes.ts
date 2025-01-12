@@ -21,19 +21,28 @@ export interface User {
 export interface Team {
   id: string;
   name: string;
+  members: User[];
   createdBy: string;
   createdAt: string;
 }
 
 export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  priority: TaskPriority;
-  assignee: User | null;
-  status: TaskStatus;
-}
 
+  id: string;
+
+  title: string;
+
+  description: string;
+
+  priority: TaskPriority;
+
+  status: TaskStatus;
+
+  assignee: string | null;
+
+  projectId: string;
+
+}
 export interface Project {
   id: string;
   name: string;

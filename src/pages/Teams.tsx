@@ -46,6 +46,7 @@ const Teams: React.FC = () => {
         const newTeam: Team = {
           id: docRef.id,
           name: newTeamName.trim(),
+          members: [],
           createdBy: auth.currentUser?.uid || 'anonymous',
           createdAt: new Date().toISOString(),
         };

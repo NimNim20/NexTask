@@ -14,7 +14,6 @@ const Projects: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [newTeamName, setNewTeamName] = useState('');
 
-  // Fetch teams from Firestore on component mount
   useEffect(() => {
     const fetchTeams = async () => {
       try {
@@ -38,6 +37,7 @@ const Projects: React.FC = () => {
       try {
         const newTeam: Omit<Team, 'id'> = {
           name: newTeamName.trim(),
+          members: [],
           createdBy: auth.currentUser?.uid || '',
           createdAt: new Date().toISOString(), 
         };
@@ -129,7 +129,7 @@ const Projects: React.FC = () => {
                 {isSidebarVisible ? 'Hide Projects' : 'Show Projects'}
               </button>
             </div>
-            <ProjectBoard project={selectedProject} onUpdateProject={handleUpdateProject} />
+            <ProjectBoard projectId={selectedProject.id} onUpdateProject={handleUpdateProject} />
           </>
         ) : (
           <div className="flex items-center justify-center h-full">
