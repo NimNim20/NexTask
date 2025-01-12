@@ -28,8 +28,3 @@ export interface Task {
     status: TaskStatus;
 }
 
-export const predefinedUsers: User[] = [
-    { id: '1', name: 'Simon' },
-    { id: '2', name: 'Benjamin' },
-    { id: '3', name: 'Test' },
-];

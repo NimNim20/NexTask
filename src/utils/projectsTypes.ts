@@ -21,6 +21,8 @@ export interface User {
 export interface Team {
   id: string;
   name: string;
+  createdBy: string;
+  createdAt: string;
 }
 
 export interface Task {
