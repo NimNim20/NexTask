@@ -2,11 +2,12 @@ import dotenv from 'dotenv';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
-// Load environment variables from .env file
+// Load environment variables from the .env file
 dotenv.config();
 
-// Check if environment variables are loaded correctly
-console.log('Firebase API Key:', process.env.FIREBASE_API_KEY);
+// Log to verify environment variables are loaded
+console.log('FIREBASE_API_KEY:', process.env.FIREBASE_API_KEY);
+console.log('FIREBASE_AUTH_DOMAIN:', process.env.FIREBASE_AUTH_DOMAIN);
 
 // Firebase configuration
 const firebaseConfig = {
@@ -49,8 +50,8 @@ const loginUser = async (email, password) => {
 
 // Example usage
 (async () => {
-    const email = 'example@example.com';
-    const password = 'yourpassword';
+    const email = 'exampleuser@example.com';
+    const password = 'password123456';
     const result = await loginUser(email, password);
     console.log(result);
 })();
