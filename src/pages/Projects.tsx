@@ -1,7 +1,5 @@
-// components/Projects/Projects.tsx
-
 import React, { useState } from 'react';
-import { Project } from '../utils/projectsTypes';
+import { Project, Team } from '../utils/projectsTypes'; 
 import ProjectCreation from '../components/Projects/ProjectCreation';
 import ProjectList from '../components/Projects/ProjectList';
 import ProjectBoard from '../components/Projects/ProjectBoard';
@@ -10,6 +8,13 @@ const Projects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+
+  const [teams] = useState<Team[]>([
+    { id: '1', name: 'Development' },
+    { id: '2', name: 'Design' },
+    { id: '3', name: 'Marketing' },
+  ]);
 
   const handleCreateProject = (newProject: Project) => {
     setProjects(prevProjects => [...prevProjects, newProject]);
@@ -35,7 +40,7 @@ const Projects: React.FC = () => {
     <div className="flex h-screen bg-slate-800">
       {isSidebarVisible && (
         <div className="w-1/6 bg-white p-4 overflow-y-auto transition-all duration-300 ease-in-out">
-          <ProjectCreation onCreateProject={handleCreateProject} />
+          <ProjectCreation onCreateProject={handleCreateProject} teams={teams} />
           <ProjectList
             projects={projects}
             onSelectProject={handleSelectProject}

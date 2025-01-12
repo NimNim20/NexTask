@@ -19,7 +19,7 @@ export interface User {
 }
 
 export interface Team {
-  id: number;
+  id: string;
   name: string;
 }
 
