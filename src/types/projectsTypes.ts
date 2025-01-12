@@ -27,21 +27,13 @@ export interface Team {
 }
 
 export interface Task {
-
-  id: string;
-
-  title: string;
-
-  description: string;
-
-  priority: TaskPriority;
-
-  status: TaskStatus;
-
-  assignee: string | null;
-
-  projectId: string;
-
+    id: string;
+    title: string;
+    description: string;
+    priority: TaskPriority;
+    status: TaskStatus;
+    assignee: string | null;
+    projectId: string;
 }
 export interface Project {
   id: string;

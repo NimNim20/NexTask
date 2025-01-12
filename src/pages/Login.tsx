@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../components/config/firebase"; // Import Firebase auth
+import { auth } from "../components/config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
@@ -14,7 +14,7 @@ function Login() {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            navigate("/"); // Redirect to home page after successful login
+            navigate("/");
         } catch (error) {
             setError("Invalid credentials. Please try again.");
             console.error("Login failed:", error);
