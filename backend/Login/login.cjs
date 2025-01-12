@@ -39,8 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var dotenv = require("dotenv");
 var app_1 = require("firebase/app");
 var auth_1 = require("firebase/auth");
-var app_2 = require("firebase/app");
-dotenv.config();
+dotenv.config(); // Load environment variables
 console.log('FIREBASE_API_KEY:', process.env.FIREBASE_API_KEY);
 console.log('FIREBASE_AUTH_DOMAIN:', process.env.FIREBASE_AUTH_DOMAIN);
 var firebaseConfig = {
@@ -75,22 +74,12 @@ var loginUser = function (email, password) { return __awaiter(void 0, void 0, vo
                     }];
             case 2:
                 error_1 = _a.sent();
-                if (error_1 instanceof app_2.FirebaseError) {
-                    console.error('Login failed:', error_1.code, error_1.message);
-                    return [2 /*return*/, {
-                            success: false,
-                            message: error_1.message,
-                            code: error_1.code,
-                        }];
-                }
-                else {
-                    console.error('An unknown error occurred:', error_1);
-                    return [2 /*return*/, {
-                            success: false,
-                            message: 'An unknown error occurred',
-                        }];
-                }
-                return [3 /*break*/, 3];
+                console.error('Login failed:', error_1.code, error_1.message);
+                return [2 /*return*/, {
+                        success: false,
+                        message: error_1.message,
+                        code: error_1.code,
+                    }];
             case 3: return [2 /*return*/];
         }
     });
