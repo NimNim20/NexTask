@@ -1,43 +1,32 @@
 import React, { useState } from 'react';
-
-import { Task, TaskStatus, TaskPriority, Project } from '../../utils/projectsTypes';
+import { Project, Task, TaskStatus, TaskPriority } from '../../utils/projectsTypes';
 import TaskColumn from '../Tasks/TaskColumn';
-
-
+import TaskCreationModal from '../Modals/TaskCreationModal';
 
 interface ProjectBoardProps {
   project: Project;
   onUpdateProject: (updatedProject: Project) => void;
 }
 
-const groupTasksByStatus = (tasks: Task[]): Record<TaskStatus, Task[]> => {
-  return tasks.reduce((acc, task) => {
-    (acc[task.status] = acc[task.status] || []).push(task);
-    return acc;
-  }, {} as Record<TaskStatus, Task[]>);
-};
-
-
 const ProjectBoard: React.FC<ProjectBoardProps> = ({ project, onUpdateProject }) => {
-  const [tasksByStatus, setTasksByStatus] = useState(groupTasksByStatus(project.tasks));
-
-  const statusColors: Record<TaskStatus, string> = {
-    [TaskStatus.Backlog]: 'bg-white',
-    [TaskStatus.NotStarted]: 'bg-blue-200',
-    [TaskStatus.PickedForDevelopment]: 'bg-yellow-200',
-    [TaskStatus.InProgress]: 'bg-purple-200',
-    [TaskStatus.InReview]: 'bg-green-200',
-    [TaskStatus.Done]: 'bg-teal-200',
+  const groupTasksByStatus = (tasks: Task[]): Record<TaskStatus, Task[]> => {
+    return tasks.reduce((acc, task) => {
+      (acc[task.status] = acc[task.status] || []).push(task);
+      return acc;
+    }, {} as Record<TaskStatus, Task[]>);
   };
 
-  const handleCreateTask = (status: TaskStatus, title: string, description: string) => {
+  const [tasksByStatus, setTasksByStatus] = useState<Record<TaskStatus, Task[]>>(groupTasksByStatus(project.tasks));
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCreateTask = (title: string, description: string, status: string) => {
     const newTask: Task = {
-      id: Date.now(),
+      id: Date.now().toString(),
       title,
       description,
       priority: TaskPriority.Medium,
+      status: status as TaskStatus,
       assignee: null,
-      status,
     };
 
     const updatedTasks = [...project.tasks, newTask];
@@ -45,15 +34,19 @@ const ProjectBoard: React.FC<ProjectBoardProps> = ({ project, onUpdateProject })
     setTasksByStatus(groupTasksByStatus(updatedTasks));
   };
 
-  const handleMoveTask = (taskId: number, newStatus: TaskStatus) => {
-    const updatedTasks: Task[] = project.tasks.map((task: Task) =>
+  const handleMoveTask = (taskId: string, newStatus: TaskStatus) => {
+    const updatedTasks = project.tasks.map((task) =>
       task.id === taskId ? { ...task, status: newStatus } : task
     );
     onUpdateProject({ ...project, tasks: updatedTasks });
     setTasksByStatus(groupTasksByStatus(updatedTasks));
   };
 
-  
+  const handleDeleteTask = (taskId: string) => {
+    const updatedTasks = project.tasks.filter((task) => task.id !== taskId);
+    onUpdateProject({ ...project, tasks: updatedTasks });
+    setTasksByStatus(groupTasksByStatus(updatedTasks));
+  };
 
   return (
     <div>
@@ -67,11 +60,25 @@ const ProjectBoard: React.FC<ProjectBoardProps> = ({ project, onUpdateProject })
             status={status}
             tasks={tasksByStatus[status] || []}
             onMoveTask={handleMoveTask}
+            onDeleteTask={handleDeleteTask}
             onCreateTask={handleCreateTask}
-            color={statusColors[status]}
+            color="blue"
           />
         ))}
       </div>
+
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md"
+      >
+        Create Task
+      </button>
+
+      <TaskCreationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreateTask={handleCreateTask}
+      />
     </div>
   );
 };

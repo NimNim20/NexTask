@@ -12,10 +12,18 @@ const Teams: React.FC = () => {
     { id: 3, name: 'Marketing' },
   ]);
   const [newTeamName, setNewTeamName] = useState('');
+  const [showConfirmDelete, setShowConfirmDelete] = useState<number | null>(null); // to handle the delete confirmation
 
   const handleCreateTeam = (e: React.FormEvent) => {
     e.preventDefault();
     if (newTeamName.trim()) {
+      // Check if the team name already exists
+      const teamExists = teams.some((team) => team.name.toLowerCase() === newTeamName.trim().toLowerCase());
+      if (teamExists) {
+        alert('Team name already exists!');
+        return;
+      }
+
       const newTeam: Team = {
         id: Date.now(),
         name: newTeamName.trim(),
@@ -26,7 +34,12 @@ const Teams: React.FC = () => {
   };
 
   const handleDeleteTeam = (id: number) => {
-    setTeams(teams.filter(team => team.id !== id));
+    if (showConfirmDelete === id) {
+      setTeams(teams.filter(team => team.id !== id));
+      setShowConfirmDelete(null);
+    } else {
+      setShowConfirmDelete(id); // ask for confirmation
+    }
   };
 
   return (
@@ -60,13 +73,32 @@ const Teams: React.FC = () => {
           <ul className="space-y-2">
             {teams.map(team => (
               <li key={team.id} className="flex items-center justify-between bg-slate-800 p-4 rounded-md shadow">
-                <span className="text-lg">{team.name}</span>
-                <button
-                  onClick={() => handleDeleteTeam(team.id)}
-                  className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  Delete
-                </button>
+                <span className="text-lg text-white">{team.name}</span>
+
+                {/* Display confirmation or delete button */}
+                {showConfirmDelete === team.id ? (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleDeleteTeam(team.id)}
+                      className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                      Confirm Delete
+                    </button>
+                    <button
+                      onClick={() => setShowConfirmDelete(null)}
+                      className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleDeleteTeam(team.id)}
+                    className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    Delete
+                  </button>
+                )}
               </li>
             ))}
           </ul>

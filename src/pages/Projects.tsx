@@ -1,3 +1,5 @@
+// components/Projects/Projects.tsx
+
 import React, { useState } from 'react';
 import { Project } from '../utils/projectsTypes';
 import ProjectCreation from '../components/Projects/ProjectCreation';
@@ -19,7 +21,7 @@ const Projects: React.FC = () => {
   };
 
   const handleUpdateProject = (updatedProject: Project) => {
-    setProjects(prevProjects => 
+    setProjects(prevProjects =>
       prevProjects.map(p => p.id === updatedProject.id ? updatedProject : p)
     );
     setSelectedProject(updatedProject);
@@ -34,10 +36,10 @@ const Projects: React.FC = () => {
       {isSidebarVisible && (
         <div className="w-1/6 bg-white p-4 overflow-y-auto transition-all duration-300 ease-in-out">
           <ProjectCreation onCreateProject={handleCreateProject} />
-          <ProjectList 
-            projects={projects} 
-            onSelectProject={handleSelectProject} 
-            selectedProject={selectedProject} 
+          <ProjectList
+            projects={projects}
+            onSelectProject={handleSelectProject}
+            selectedProject={selectedProject}
           />
         </div>
       )}
@@ -52,9 +54,9 @@ const Projects: React.FC = () => {
                 {isSidebarVisible ? 'Hide Projects' : 'Show Projects'}
               </button>
             </div>
-            <ProjectBoard 
-              project={selectedProject} 
-              onUpdateProject={handleUpdateProject} 
+            <ProjectBoard
+              project={selectedProject}
+              onUpdateProject={handleUpdateProject}
             />
           </>
         ) : (
@@ -68,4 +70,3 @@ const Projects: React.FC = () => {
 };
 
 export default Projects;
-

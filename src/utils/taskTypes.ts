@@ -15,12 +15,12 @@ export enum TaskPriority {
 }
 
 export interface User {
-    id: number;
+    id: string;
     name: string;
 }
 
 export interface Task {
-    id: number;
+    id: string;
     title: string;
     description: string;
     priority: TaskPriority;
@@ -29,7 +29,7 @@ export interface Task {
 }
 
 export const predefinedUsers: User[] = [
-    { id: 1, name: 'Simon' },
-    { id: 2, name: 'Benjamin' },
-    { id: 3, name: 'Test' },
+    { id: '1', name: 'Simon' },
+    { id: '2', name: 'Benjamin' },
+    { id: '3', name: 'Test' },
 ];

@@ -24,7 +24,7 @@ export interface Team {
 }
 
 export interface Task {
-  id: number;
+  id: string;
   title: string;
   description: string;
   priority: TaskPriority;
@@ -33,7 +33,7 @@ export interface Task {
 }
 
 export interface Project {
-  id: number;
+  id: string;
   name: string;
   team: Team | null;
   tasks: Task[];
