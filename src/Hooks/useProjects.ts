@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Project } from '../types/projectsTypes';
+import { Project } from '../types/project';
 
 export const useProjects = () => {
     const [projects, setProjects] = useState<Project[]>([]);

@@ -1,4 +1,3 @@
-
 export enum TaskStatus {
     Backlog = 'Backlog',
     NotStarted = 'Not Started',
@@ -14,14 +13,4 @@ export enum TaskPriority {
     High = 'High',
 }
 
-
-export interface Task {
-    id: string;
-    title: string;
-    description: string;
-    priority: TaskPriority;
-    status: TaskStatus;
-    assignee: string | null;
-    projectId: string;
-}
-
+export type UserRole = 'user' | 'admin' | 'projectAdministrator';

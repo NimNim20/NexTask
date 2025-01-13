@@ -1,5 +1,5 @@
 import React from 'react';
-import { TaskStatus } from '../../types/projectsTypes';
+import { TaskStatus } from '../../types/enums';
 
 interface TaskModalProps {
     isOpen: boolean;

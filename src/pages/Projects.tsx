@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Project } from '../types/projectsTypes';
-import { Team } from '../types/projectsTypes';
+import { Project } from '../types/project';
+import { Team } from '../types/team';
 import ProjectCreation from '../components/Projects/ProjectCreation';
 import ProjectList from '../components/Projects/ProjectList';
 import ProjectBoard from '../components/Projects/ProjectBoard';

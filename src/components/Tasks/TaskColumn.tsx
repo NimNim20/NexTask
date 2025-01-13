@@ -1,6 +1,7 @@
 import React from 'react';
-import { Task, TaskStatus } from '../../types/taskTypes';
+import { Task } from '../../types/task';
 import TaskCard from './TaskCard';
+import { TaskStatus } from '../../types/enums';
 
 interface TaskColumnProps {
 

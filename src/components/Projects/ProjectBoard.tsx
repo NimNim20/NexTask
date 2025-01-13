@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { TaskStatus, Project } from '../../types/projectsTypes';
-import { addDoc, updateDoc, doc, deleteDoc, collection } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import React, { useState, useCallback } from 'react';
+import { Project } from '../../types/project';
+import { useTaskActions } from '../../Hooks/useTaskActions';
 import useProjectData from '../../Hooks/useProjectData';
 import ProjectHeader from './ProjectHeader';
 import TaskList from '../Tasks/TaskList';
 import TaskModal from '../Modals/TaskModal';
+import { TaskStatus, TaskPriority } from '../../types/enums';
+import { Task } from '../../types/task';
+import { Timestamp } from 'firebase/firestore';
 
 interface ProjectBoardProps {
   projectId: string;
@@ -13,55 +15,48 @@ interface ProjectBoardProps {
 }
 
 const ProjectBoard: React.FC<ProjectBoardProps> = ({ projectId, onUpdateProject }) => {
-  const { tasksByStatus, users, team } = useProjectData(projectId);
+  const { tasksByStatus, users, team, project } = useProjectData(projectId);
+  const { createTask, moveTask, deleteTask, assignTask } = useTaskActions(onUpdateProject);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleCreateTask = async (title: string, description: string, status: string) => {
-    const newTask = {
+  const handleCreateTask = useCallback(async (title: string, description: string, status: string) => {
+    const newTask: Task = {
+      id: '',
       title,
       description,
-      priority: 'Medium',
+      priority: TaskPriority.Medium,
       status: status as TaskStatus,
       assignee: null,
-      projectId: projectId,
+      projectId,
+      dueDate: Timestamp.fromDate(new Date()),
+      createdAt: Timestamp.fromDate(new Date()),
+      tasks: [],
     };
 
-    const taskRef = await addDoc(collection(db, 'tasks'), newTask);
-
-    onUpdateProject((prevProject: Project) => ({
-      ...prevProject,
-      tasks: [...prevProject.tasks, { ...newTask, id: taskRef.id }],
-    }));
-  };
-
-  const handleMoveTask = async (taskId: string, newStatus: TaskStatus) => {
-    const taskRef = doc(db, 'tasks', taskId);
-    await updateDoc(taskRef, { status: newStatus });
-  };
-
-  const handleDeleteTask = async (taskId: string) => {
-    const taskRef = doc(db, 'tasks', taskId);
-    await deleteDoc(taskRef);
-  };
-
-  const handleAssignTask = async (taskId: string, userId: string) => {
-    const taskRef = doc(db, 'tasks', taskId);
-    await updateDoc(taskRef, { assignee: userId });
-  };
+    if (project) {
+      await createTask(newTask, project);
+    }
+    
+    setIsModalOpen(false);
+  }, [createTask, projectId, project]);
 
   return (
     <div>
-      <ProjectHeader teamName={team?.name ?? null} projectId={projectId} />
+      <ProjectHeader teamName={team ? team.name : "No Team Assigned"} projectId={projectId} />
       <TaskList
         tasksByStatus={tasksByStatus}
-        onMoveTask={handleMoveTask}
-        onDeleteTask={handleDeleteTask}
-        onAssignTask={handleAssignTask}
+        onMoveTask={moveTask}
+        onDeleteTask={deleteTask}
+        onAssignTask={assignTask}
         onCreateTask={handleCreateTask}
         users={users}
       />
       <button onClick={() => setIsModalOpen(true)}>Create Task</button>
-      <TaskModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onCreateTask={handleCreateTask} />
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreateTask={handleCreateTask}
+      />
     </div>
   );
 };

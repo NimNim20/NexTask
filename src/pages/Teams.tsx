@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, addDoc, Timestamp } from 'firebase/firestore';
 import { auth } from '../components/config/firebase';
-import { Team } from '../types/projectsTypes';
+import { Team } from '../types/team';
 
 const Teams: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);
@@ -48,7 +48,7 @@ const Teams: React.FC = () => {
           name: newTeamName.trim(),
           members: [],
           createdBy: auth.currentUser?.uid || 'anonymous',
-          createdAt: new Date().toISOString(),
+            createdAt: Timestamp.fromDate(new Date()), 
         };
         setTeams([...teams, newTeam]);
         setNewTeamName('');

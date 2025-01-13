@@ -1,7 +1,8 @@
 // components/TaskList.tsx
 import React from 'react';
-import { Task, TaskStatus } from '../../types/projectsTypes';
+import { Task } from '../../types/task';
 import TaskColumn from './TaskColumn';
+import { TaskStatus } from '../../types/enums';
 
 interface TaskListProps {
     tasksByStatus: Record<TaskStatus, Task[]>;

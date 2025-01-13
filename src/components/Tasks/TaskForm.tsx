@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TaskStatus } from '../../types/projectsTypes';
+import { TaskStatus } from '../../types/enums';
 
 const TaskForm: React.FC<{
     status: TaskStatus;
