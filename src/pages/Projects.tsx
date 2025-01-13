@@ -5,7 +5,7 @@ import ProjectCreation from '../components/Projects/ProjectCreation';
 import ProjectList from '../components/Projects/ProjectList';
 import ProjectBoard from '../components/Projects/ProjectBoard';
 import { db, auth } from '../components/config/firebase';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, Timestamp } from 'firebase/firestore';
 
 const Projects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -39,7 +39,7 @@ const Projects: React.FC = () => {
           name: newTeamName.trim(),
           members: [],
           createdBy: auth.currentUser?.uid || '',
-          createdAt: new Date().toISOString(), 
+          createdAt: Timestamp.fromDate(new Date()), 
         };
 
         const docRef = await addDoc(collection(db, 'teams'), newTeam);
