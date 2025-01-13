@@ -11,15 +11,30 @@ function Login() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+    
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            navigate("/");
-        } catch (error) {
-            setError("Invalid credentials. Please try again.");
-            console.error("Login failed:", error);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log("User signed in:", userCredential.user); // Log user details
+            navigate("/"); // Redirect to the homepage or dashboard
+        } catch (error: unknown) {
+            if (error instanceof Error && 'code' in error) {
+                const firebaseError = error as { code: string; message: string };
+                console.error("Login error:", firebaseError.code, firebaseError.message);
+    
+                if (firebaseError.code === "auth/user-not-found") {
+                    setError("No account found with this email.");
+                } else if (firebaseError.code === "auth/wrong-password") {
+                    setError("Incorrect password. Please try again.");
+                } else {
+                    setError("Failed to log in. Please try again later.");
+                }
+            } else {
+                console.error("An unknown error occurred.");
+                setError("An unexpected error occurred. Please try again.");
+            }
         }
     };
+    
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
