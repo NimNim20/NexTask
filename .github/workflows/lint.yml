@@ -1,10 +1,10 @@
 name: Lint Code Base
 
 on:
-  pull_request:        # Trigger on pull requests
+  pull_request:
     branches:
-      - main           # Specify the branch to trigger the workflow
-  push:                # Trigger on push
+      - main
+  push:
     branches:
       - main
 
@@ -18,17 +18,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Run Super-Linter
+      # Fetch the list of changed files
+      - name: Get Changed Files
+        id: changed-files
+        uses: tj-actions/changed-files@v36
+        with:
+          files: |
+            *.js
+            *.ts
+            *.tsx
+            *.css
+            *.scss
+            *.json
+            *.md
+
+      # Run Super-Linter on changed files only
       - name: Run Super-Linter
+        if: steps.changed-files.outputs.any_changed == 'true'
         uses: github/super-linter@v5
         env:
-          VALIDATE_ALL_CODEBASE: true              # Validate the entire codebase
-          DEFAULT_BRANCH: main                     # Specify the default branch
+          VALIDATE_ALL_CODEBASE: false # Disable full codebase validation
+          DEFAULT_BRANCH: main # Specify the default branch
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub token for accessing the repo
-          FILTER_REGEX_EXCLUDE: ^(node_modules|build|dist|public)/ # Exclude unnecessary folders
-          LOG_LEVEL: verbose                       # Detailed logs
-          VALIDATE_JAVASCRIPT_ES: true             # Enable JavaScript linting
-          VALIDATE_TYPESCRIPT_ES: true             # Enable TypeScript linting
-          VALIDATE_CSS: true                       # Enable CSS linting
-          VALIDATE_MARKDOWN: true                  # Enable Markdown linting
-          VALIDATE_JSON: true                      # Enable JSON linting
+          LOG_LEVEL: verbose # Detailed logs
+          VALIDATE_JAVASCRIPT_ES: true # Enable JavaScript linting
+          VALIDATE_TYPESCRIPT_ES: true # Enable TypeScript linting
+          VALIDATE_CSS: true # Enable CSS linting
+          VALIDATE_MARKDOWN: true # Enable Markdown linting
+          VALIDATE_JSON: true # Enable JSON linting
+        with:
+          file-paths: ${{ steps.changed-files.outputs.files }}

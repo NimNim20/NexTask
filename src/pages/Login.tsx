@@ -13,16 +13,15 @@ function Login() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        // Reset error before submitting new login attempt
         setError("");
-        setIsLoading(true); // Show loading spinner
+        setIsLoading(true);
 
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("User signed in:", userCredential.user); // Log user details
-            navigate("/"); // Redirect to the homepage or dashboard
+            console.log("User signed in:", userCredential.user);
+            navigate("/");
         } catch (error: unknown) {
-            setIsLoading(false); // Hide loading spinner when error occurs
+            setIsLoading(false);
             if (error instanceof Error && "code" in error) {
                 const firebaseError = error as { code: string; message: string };
                 console.error("Login error:", firebaseError.code, firebaseError.message);
