@@ -7,20 +7,27 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false); // Loading state
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-    
+        
+        // Reset error before submitting new login attempt
+        setError("");
+        setIsLoading(true); // Show loading spinner
+
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log("User signed in:", userCredential.user); // Log user details
             navigate("/"); // Redirect to the homepage or dashboard
         } catch (error: unknown) {
-            if (error instanceof Error && 'code' in error) {
+            setIsLoading(false); // Hide loading spinner when error occurs
+            if (error instanceof Error && "code" in error) {
                 const firebaseError = error as { code: string; message: string };
                 console.error("Login error:", firebaseError.code, firebaseError.message);
-    
+
+                // Show specific error message based on Firebase error code
                 if (firebaseError.code === "auth/user-not-found") {
                     setError("No account found with this email.");
                 } else if (firebaseError.code === "auth/wrong-password") {
@@ -34,7 +41,6 @@ function Login() {
             }
         }
     };
-    
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -65,8 +71,9 @@ function Login() {
                     <button
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 rounded"
+                        disabled={isLoading}
                     >
-                        Login
+                        {isLoading ? "Logging in..." : "Login"}
                     </button>
                 </form>
             </div>
